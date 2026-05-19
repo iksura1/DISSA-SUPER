@@ -1,6 +1,7 @@
 /* ════════════════════════════════════════════════════════
    DISSA SUPER — script.js
    All JavaScript logic — clean, organised, well-commented
+   FIXED: Removed external API calls, added local responses
    ════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -228,7 +229,7 @@ function renderNotifications() {
 document.addEventListener('click', (e) => {
   const panel = document.getElementById('notifPanel');
   const btn   = document.getElementById('notifBtn');
-  if (!panel.contains(e.target) && !btn.contains(e.target)) {
+  if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
     panel.classList.remove('open');
   }
 });
@@ -826,7 +827,7 @@ function renderRecipes() {
         <div class="recipe-tags">
           ${r.tags.map(t => `<span class="recipe-tag">${t}</span>`).join('')}
         </div>
-        <button onclick="addRecipeIngredients(${JSON.stringify(r.ingredients).replace(/"/g,'&quot;')})"
+        <button onclick='addRecipeIngredients(${JSON.stringify(r.ingredients)})'
           style="margin-top:12px;width:100%;background:var(--green-pale);color:var(--green);border:1.5px solid var(--green-mid);border-radius:10px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;"
           onmouseover="this.style.background='var(--green)';this.style.color='white'"
           onmouseout="this.style.background='var(--green-pale)';this.style.color='var(--green)'">
@@ -991,8 +992,8 @@ function toggleDelivery() {
   const badge = document.getElementById('hDelBadge');
   const text  = document.getElementById('hDelText');
   const hero  = document.getElementById('heroDelStatus');
-  badge.className = 'delivery-pill ' + (deliveryEnabled ? 'on' : 'off');
-  text.textContent = deliveryEnabled ? 'Delivery On' : 'Delivery Off';
+  if (badge) badge.className = 'delivery-pill ' + (deliveryEnabled ? 'on' : 'off');
+  if (text) text.textContent = deliveryEnabled ? 'Delivery On' : 'Delivery Off';
   if (hero) hero.textContent = deliveryEnabled ? '✅ Available' : '⏸ Unavailable';
   renderAdminDelivery();
   showToast(deliveryEnabled ? '✅ Delivery ENABLED' : '⏸ Delivery DISABLED');
@@ -1236,7 +1237,7 @@ function renderAnalytics() {
 }
 
 // ══════════════════════════════════════════════════════
-// 19. AI CHATBOT
+// 19. AI CHATBOT (FIXED - LOCAL RESPONSES)
 // ══════════════════════════════════════════════════════
 
 const QUICK_QUESTIONS = [
@@ -1250,31 +1251,37 @@ const QUICK_QUESTIONS = [
 
 function toggleChat() {
   chatOpen = !chatOpen;
-  document.getElementById('chatWindow').classList.toggle('open', chatOpen);
-  document.getElementById('chatFab').innerHTML = chatOpen
-    ? '✕'
-    : '🤖<span class="chat-notif" id="chatNotif" style="display:none">1</span>';
-
+  const chatWindow = document.getElementById('chatWindow');
+  const chatFab = document.getElementById('chatFab');
+  if (chatWindow) chatWindow.classList.toggle('open', chatOpen);
+  if (chatFab) chatFab.innerHTML = chatOpen ? '✕' : '🤖';
+  
   if (chatOpen && document.getElementById('chatMsgs').children.length === 0) {
-    botMsg(`👋 **Ayubowan! Welcome to DISSA SUPER!**\n\nI'm your AI grocery assistant. I can help with:\n\n🥦 **Products & prices**\n🚚 **Delivery info**\n🛒 **Ordering help**\n🎁 **Promo codes**\n\nWhat can I help you with today?`);
+    botMsg(`👋 **Ayubowan! Welcome to DISSA SUPER!**\n\nI'm your grocery assistant. I can help with:\n\n🥦 **Products & prices**\n🚚 **Delivery info**\n🛒 **Ordering help**\n🎁 **Promo codes**\n\nWhat can I help you with today?`);
     renderQuickChips();
   }
 }
 
 function renderQuickChips() {
-  document.getElementById('quickChips').innerHTML = QUICK_QUESTIONS.map(q =>
-    `<button class="qchip" onclick="sendQuick('${q}')">${q}</button>`
-  ).join('');
+  const chipsDiv = document.getElementById('quickChips');
+  if (chipsDiv) {
+    chipsDiv.innerHTML = QUICK_QUESTIONS.map(q =>
+      `<button class="qchip" onclick="sendQuick('${q.replace(/'/g, "\\'")}')">${q}</button>`
+    ).join('');
+  }
 }
 
 function sendQuick(q) {
-  document.getElementById('quickChips').innerHTML = '';
-  document.getElementById('chatInp').value = q;
+  const chipsDiv = document.getElementById('quickChips');
+  if (chipsDiv) chipsDiv.innerHTML = '';
+  const chatInp = document.getElementById('chatInp');
+  if (chatInp) chatInp.value = q;
   sendChat();
 }
 
 function botMsg(text) {
   const msgs = document.getElementById('chatMsgs');
+  if (!msgs) return;
   const d = document.createElement('div');
   d.className = 'cmsg bot';
   d.innerHTML = `<div class="cbubble">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')}</div>
@@ -1285,16 +1292,24 @@ function botMsg(text) {
 
 function userMsg(text) {
   const msgs = document.getElementById('chatMsgs');
+  if (!msgs) return;
   const d = document.createElement('div');
   d.className = 'cmsg user';
-  d.innerHTML = `<div class="cbubble">${text}</div>
+  d.innerHTML = `<div class="cbubble">${escapeHtml(text)}</div>
     <div class="chat-time" style="text-align:right">${timeNow()}</div>`;
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 function showTyping() {
   const msgs = document.getElementById('chatMsgs');
+  if (!msgs) return;
   const d = document.createElement('div');
   d.className = 'cmsg bot';
   d.id = 'typingIndicator';
@@ -1308,74 +1323,165 @@ function hideTyping() {
   if (t) t.remove();
 }
 
+// Get fresh items for chat response
+function getFreshItemsText() {
+  const freshItems = products.filter(p => p.badge === 'Fresh' || p.badge === 'Season').slice(0, 5);
+  if (freshItems.length === 0) return "No fresh items at the moment.";
+  return freshItems.map(p => `${p.emoji} ${p.name} (${lkr(p.price)})`).join(', ');
+}
+
+// Get vegetables list
+function getVegetablesText() {
+  const vegs = products.filter(p => p.category === 'Vegetables').slice(0, 8);
+  if (vegs.length === 0) return "No vegetables found.";
+  return vegs.map(p => `${p.emoji} ${p.name} - ${lkr(p.price)} per ${p.unit}`).join(', ');
+}
+
+// Main chat function with local responses (no external API)
 async function sendChat() {
-  const inp  = document.getElementById('chatInp');
+  const inp = document.getElementById('chatInp');
+  if (!inp) return;
   const text = inp.value.trim();
   if (!text) return;
   inp.value = '';
-  document.getElementById('quickChips').innerHTML = '';
+  
+  const chipsDiv = document.getElementById('quickChips');
+  if (chipsDiv) chipsDiv.innerHTML = '';
 
   userMsg(text);
-  chatHistory.push({ role: 'user', content: text });
   showTyping();
 
-  const productList = products
-    .map(p => `• ${p.name} (${p.category}): ${lkr(p.price)} per ${p.unit}${p.badge ? ' [' + p.badge + ']' : ''}${p.stock === 0 ? ' [OUT OF STOCK]' : ''}`)
-    .join('\n');
-  const cats = [...new Set(products.map(p => p.category))].join(', ');
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `You are a warm, friendly AI assistant for DISSA SUPER, a Sri Lankan neighbourhood grocery supermarket.
-
-STORE INFO:
-- Name: DISSA SUPER | Country: Sri Lanka | Currency: LKR
-- Delivery fee: LKR 200 flat rate | Free delivery over LKR 3000
-- Delivery status: ${deliveryEnabled ? 'AVAILABLE ✅' : 'UNAVAILABLE ⏸ (pickup only)'}
-- Categories: ${cats}
-- Promo codes: DISSA10 (10% off), FRESH20 (20% off), WELCOME (15% off)
-- WhatsApp: +94 77 123 4567
-
-CURRENT PRODUCTS:
-${productList}
-
-STYLE: Warm, friendly, concise. Use LKR. Use emojis naturally. End with a helpful follow-up offer.`,
-        messages: chatHistory.slice(-12),
-      }),
-    });
-
-    const data  = await resp.json();
-    const reply = data.content?.[0]?.text || "Sorry, I'm having trouble. Please try again!";
+  // Simulate thinking time
+  setTimeout(() => {
     hideTyping();
-    chatHistory.push({ role: 'assistant', content: reply });
+    let reply = "";
+    const lowerText = text.toLowerCase();
+    
+    // Vegetables question
+    if (lowerText.includes('vegetable') || (lowerText.includes('veg') && !lowerText.includes('vegan'))) {
+      reply = `🥦 **Our Fresh Vegetables:**\n\n${getVegetablesText()}\n\nWould you like prices or delivery info for any of these?`;
+    }
+    // Delivery questions
+    else if (lowerText.includes('delivery') || lowerText.includes('deliver')) {
+      if (deliveryEnabled) {
+        reply = `🚚 **Delivery Information:**\n\n✅ Delivery is currently AVAILABLE\n💰 Delivery Fee: LKR 200 flat rate\n🎉 FREE delivery on orders over LKR 3000\n⏰ Same-day delivery for orders before 2 PM\n\nWould you like to place an order?`;
+      } else {
+        reply = `⏸ **Delivery Status:**\n\nDelivery is currently UNAVAILABLE.\n🏪 Please choose **Store Pickup** at checkout.\n\nOur store is located at 123 Main Street, Colombo. We're open 7 AM - 9 PM on weekdays!`;
+      }
+    }
+    // Promo codes
+    else if (lowerText.includes('promo') || lowerText.includes('discount') || lowerText.includes('code')) {
+      reply = `🎁 **Active Promo Codes:**\n\n• **DISSA10** → 10% off your first order\n• **FRESH20** → 20% off fresh items\n• **WELCOME** → 15% off welcome offer\n\nJust enter the code at checkout!`;
+    }
+    // Fresh items
+    else if (lowerText.includes('fresh') || lowerText.includes('today')) {
+      reply = `🥬 **Fresh Today:**\n\n${getFreshItemsText()}\n\nThese items are handpicked this morning! 🎉`;
+    }
+    // How to order
+    else if (lowerText.includes('order') || lowerText.includes('buy') || lowerText.includes('purchase')) {
+      reply = `🛒 **How to Place an Order:**\n\n1. Browse our products in the Shop section\n2. Click the + button to add items to cart\n3. Click the cart icon (🛒) to review\n4. Proceed to checkout\n5. Enter your details and confirm!\n\n📞 Need help? WhatsApp us at +94 77 123 4567`;
+    }
+    // Price questions
+    else if (lowerText.includes('price') || lowerText.includes('cost') || lowerText.includes('how much')) {
+      reply = `💰 **Pricing Info:**\n\nAll prices are in LKR (Sri Lankan Rupees).\n• Delivery: LKR 200 flat fee (FREE over LKR 3000)\n• Most products are priced per kg or per pack\n• Promo codes available for extra savings!\n\nWhich product's price would you like to know?`;
+    }
+    // Store hours
+    else if (lowerText.includes('hour') || lowerText.includes('open') || lowerText.includes('timing')) {
+      reply = `🕐 **Store Hours:**\n\n• Monday - Friday: 7:00 AM – 9:00 PM\n• Saturday: 7:00 AM – 8:00 PM\n• Sunday: 8:00 AM – 6:00 PM\n\nWe're located at 123 Main Street, Colombo 7!`;
+    }
+    // Contact
+    else if (lowerText.includes('contact') || lowerText.includes('phone') || lowerText.includes('email')) {
+      reply = `📞 **Contact Us:**\n\n• WhatsApp: +94 77 123 4567\n• Phone: +94 11 234 5678\n• Email: hello@dissasuper.lk\n• Address: 123 Main St, Colombo 7\n\nWe usually reply within minutes on WhatsApp!`;
+    }
+    // Default greeting/helpful response
+    else if (lowerText.includes('hi') || lowerText.includes('hello') || lowerText.includes('hey')) {
+      reply = `👋 Hello! Welcome to DISSA SUPER! 😊\n\nI can help you with:\n• 🥦 Product information and prices\n• 🚚 Delivery status and fees\n• 🎁 Promo codes and discounts\n• 🛒 How to place an order\n• 📞 Store contact info\n\nWhat would you like to know?`;
+    }
+    // Default response
+    else {
+      reply = `💚 **Thanks for reaching out!**\n\nI can help with:\n• 🥦 Vegetables & products\n• 🚚 Delivery info\n• 🎁 Promo codes (DISSA10, FRESH20, WELCOME)\n• 🛒 How to order\n• 📞 Contact details\n\nWhat specific information are you looking for?`;
+    }
+    
     botMsg(reply);
-  } catch (e) {
-    hideTyping();
-    botMsg("Sorry, I'm having a connection issue. Please try again! 🙏");
+    chatHistory.push({ role: 'user', content: text });
+    chatHistory.push({ role: 'assistant', content: reply });
+  }, 800);
+}
+
+// ══════════════════════════════════════════════════════
+// 20. PRODUCT DETAIL MODAL
+// ══════════════════════════════════════════════════════
+
+function showProductDetail(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const inWishlist = wishlist.some(w => w.id === id);
+  const stockStatus = p.stock === 0 ? 'OUT OF STOCK' : `${p.stock}% available`;
+  
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.pointerEvents = 'all';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:500px">
+      <div class="modal-head">
+        <h2>${p.emoji} ${p.name}</h2>
+        <button class="close-x" onclick="this.closest('.modal-overlay').remove()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align:center;font-size:64px;margin-bottom:16px">${p.emoji}</div>
+        <p><strong>📦 Unit:</strong> ${p.unit}</p>
+        <p><strong>💰 Price:</strong> ${lkr(p.price)}</p>
+        <p><strong>📊 Stock:</strong> ${stockStatus}</p>
+        <p><strong>🏷️ Category:</strong> ${p.category}</p>
+        ${p.badge ? `<p><strong>✨ Badge:</strong> ${p.badge}</p>` : ''}
+        <div style="margin-top:24px;display:flex;gap:12px">
+          ${p.stock > 0 ? `<button class="btn-hero-primary" style="flex:1" onclick="addToCart(${p.id}); this.closest('.modal-overlay').remove()">🛒 Add to Cart</button>` : ''}
+          <button class="btn-hero-secondary" style="flex:1" onclick="toggleWishlist(${p.id}); this.closest('.modal-overlay').remove()">
+            ${inWishlist ? '❤️ Remove from Wishlist' : '🤍 Add to Wishlist'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// 21. SCROLL NAVIGATION
+// ══════════════════════════════════════════════════════
+
+function scrollTo(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
 // ══════════════════════════════════════════════════════
-// 20. SCROLL / BACK TO TOP
+// 22. BACK TO TOP
 // ══════════════════════════════════════════════════════
 
 window.addEventListener('scroll', () => {
   const btn = document.getElementById('backTop');
-  if (window.scrollY > 400) btn.classList.add('visible');
-  else btn.classList.remove('visible');
+  if (btn) {
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  }
 
   // Sticky header shadow
   const header = document.getElementById('mainHeader');
-  header.style.boxShadow = window.scrollY > 10 ? 'var(--shadow)' : 'var(--shadow-sm)';
+  if (header) {
+    header.style.boxShadow = window.scrollY > 10 ? 'var(--shadow)' : 'var(--shadow-sm)';
+  }
 });
 
 // ══════════════════════════════════════════════════════
-// 21. INITIALISE ON PAGE LOAD
+// 23. INITIALISE ON PAGE LOAD
 // ══════════════════════════════════════════════════════
 
 function init() {
@@ -1387,20 +1493,69 @@ function init() {
   renderNotifications();
 
   // Hero order count
-  document.getElementById('heroOrderCount').textContent = orders.length + ' Orders';
-  document.getElementById('heroProductCount').textContent = products.length;
+  const heroOrder = document.getElementById('heroOrderCount');
+  if (heroOrder) heroOrder.textContent = orders.length + ' Orders';
+  const heroProduct = document.getElementById('heroProductCount');
+  if (heroProduct) heroProduct.textContent = products.length;
 
-  // Show chat notification after 5 seconds
+  // Show notification dot after delay
   setTimeout(() => {
-    const n = document.getElementById('chatNotif');
-    if (n && !chatOpen) n.style.display = 'flex';
-  }, 5000);
-
-  // Show notification dot
-  setTimeout(() => {
-    document.getElementById('notifDot').style.display = 'block';
+    const notifDot = document.getElementById('notifDot');
+    if (notifDot) notifDot.style.display = 'block';
   }, 2000);
 }
+
+// Make functions globally available
+window.scrollTo = scrollTo;
+window.toggleDarkMode = toggleDarkMode;
+window.toggleLang = toggleLang;
+window.toggleMobileNav = toggleMobileNav;
+window.closeMobileNav = closeMobileNav;
+window.toggleNotif = toggleNotif;
+window.closeBanner = closeBanner;
+window.applyPromo = applyPromo;
+window.applyPromoFromCart = applyPromoFromCart;
+window.selectCat = selectCat;
+window.filterProducts = filterProducts;
+window.sortProducts = sortProducts;
+window.loadMore = loadMore;
+window.toggleWishlist = toggleWishlist;
+window.openWishlist = openWishlist;
+window.closeWishlist = closeWishlist;
+window.moveToCart = moveToCart;
+window.addToCart = addToCart;
+window.incQty = incQty;
+window.decQty = decQty;
+window.removeFromCart = removeFromCart;
+window.openCart = openCart;
+window.closeCart = closeCart;
+window.openCheckout = openCheckout;
+window.closeCheckout = closeCheckout;
+window.setOType = setOType;
+window.placeOrder = placeOrder;
+window.openReviewForm = openReviewForm;
+window.closeReviewForm = closeReviewForm;
+window.setRating = setRating;
+window.submitReview = submitReview;
+window.addRecipeIngredients = addRecipeIngredients;
+window.submitContact = submitContact;
+window.subscribeNewsletter = subscribeNewsletter;
+window.openMap = openMap;
+window.openWhatsApp = openWhatsApp;
+window.openAdmin = openAdmin;
+window.closeAdmin = closeAdmin;
+window.adminTab = adminTab;
+window.toggleDelivery = toggleDelivery;
+window.showProdForm = showProdForm;
+window.saveProd = saveProd;
+window.cancelProdForm = cancelProdForm;
+window.delProduct = delProduct;
+window.updateOrderStatus = updateOrderStatus;
+window.clearOrders = clearOrders;
+window.toggleChat = toggleChat;
+window.sendChat = sendChat;
+window.sendQuick = sendQuick;
+window.showProductDetail = showProductDetail;
 
 // Run on load
 document.addEventListener('DOMContentLoaded', init);
