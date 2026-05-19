@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>DISSA SUPER — Fresh Groceries Delivered</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -239,8 +239,8 @@
   <div class="about-grid">
     <div class="about-text">
       <h2 class="section-title">🌿 About DISSA SUPER</h2>
-      <p>We are a trusted Sri Lankan neighbourhood supermarket committed to bringing the freshest groceries right to your doorstep. Founded with a passion for quality and affordability, DISSA SUPER sources directly from local farmers and trusted suppliers.</p>
-      <p style="margin-top:14px">From farm-fresh vegetables to daily dairy, we stock everything your family needs — delivered fast or ready for pickup.</p>
+      <p id="aboutText">We are a trusted Sri Lankan neighbourhood supermarket committed to bringing the freshest groceries right to your doorstep. Founded with a passion for quality and affordability, DISSA SUPER sources directly from local farmers and trusted suppliers.</p>
+      <p style="margin-top:14px" id="aboutText2">From farm-fresh vegetables to daily dairy, we stock everything your family needs — delivered fast or ready for pickup.</p>
       <div class="about-features">
         <div class="about-feat">✅ 100% Fresh Daily</div>
         <div class="about-feat">🚚 Same-Day Delivery</div>
@@ -252,7 +252,7 @@
       <div class="map-placeholder" onclick="openMap()">
         <div style="font-size:48px">📍</div>
         <p style="font-weight:700;margin-top:8px">Click to View on Google Maps</p>
-        <p style="font-size:13px;opacity:.7">123 Main Street, Colombo, Sri Lanka</p>
+        <p style="font-size:13px;opacity:.7" id="addressDisplay">123 Main Street, Colombo, Sri Lanka</p>
       </div>
       <div class="store-hours">
         <h4>🕐 Store Hours</h4>
@@ -292,28 +292,28 @@
         <span class="ccard-icon">💬</span>
         <div>
           <div class="ccard-title">WhatsApp</div>
-          <div class="ccard-val">+94 77 123 4567</div>
+          <div class="ccard-val" id="whatsappDisplay">+94 77 123 4567</div>
         </div>
       </div>
       <div class="contact-card">
         <span class="ccard-icon">📞</span>
         <div>
           <div class="ccard-title">Phone</div>
-          <div class="ccard-val">+94 11 234 5678</div>
+          <div class="ccard-val" id="phoneDisplay">+94 11 234 5678</div>
         </div>
       </div>
       <div class="contact-card">
         <span class="ccard-icon">📧</span>
         <div>
           <div class="ccard-title">Email</div>
-          <div class="ccard-val">hello@dissasuper.lk</div>
+          <div class="ccard-val" id="emailDisplay">hello@dissasuper.lk</div>
         </div>
       </div>
       <div class="contact-card">
         <span class="ccard-icon">📍</span>
         <div>
           <div class="ccard-title">Address</div>
-          <div class="ccard-val">123 Main St, Colombo 7, Sri Lanka</div>
+          <div class="ccard-val" id="addressDisplay2">123 Main St, Colombo 7, Sri Lanka</div>
         </div>
       </div>
     </div>
@@ -502,6 +502,7 @@
       <button class="admin-nav-btn" onclick="adminTab('orders',this)">📋 Orders</button>
       <button class="admin-nav-btn" onclick="adminTab('users',this)">👤 Users</button>
       <button class="admin-nav-btn" onclick="adminTab('analytics',this)">📈 Analytics</button>
+      <button class="admin-nav-btn" onclick="adminTab('shopinfo',this)">🏪 Shop Info</button>
     </div>
     <div class="admin-body" id="adminBody"></div>
   </div>
