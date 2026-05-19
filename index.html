@@ -2,20 +2,15 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes" />
   <title>DISSA SUPER — Fresh Groceries Delivered</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════
-     HEADER / NAV
-══════════════════════════════════════════════ -->
 <header id="mainHeader">
   <div class="header-inner">
-
-    <!-- Logo -->
     <a class="logo" href="#">
       <div class="logo-icon">🛒</div>
       <div>
@@ -24,55 +19,29 @@
       </div>
     </a>
 
-    <!-- Desktop Nav Links -->
     <nav class="main-nav" id="mainNav">
-      <a href="#home" class="nav-link active" onclick="scrollTo('home')">Home</a>
-      <a href="#products" class="nav-link" onclick="scrollTo('products')">Shop</a>
-      <a href="#fresh-today" class="nav-link" onclick="scrollTo('fresh-today')">Fresh Today</a>
-      <a href="#recipes" class="nav-link" onclick="scrollTo('recipes')">Recipes</a>
-      <a href="#about" class="nav-link" onclick="scrollTo('about')">About</a>
-      <a href="#contact" class="nav-link" onclick="scrollTo('contact')">Contact</a>
+      <a href="#home" class="nav-link active" onclick="scrollToSection('home')">Home</a>
+      <a href="#products" class="nav-link" onclick="scrollToSection('products')">Shop</a>
+      <a href="#fresh-today" class="nav-link" onclick="scrollToSection('fresh-today')">Fresh Today</a>
+      <a href="#recipes" class="nav-link" onclick="scrollToSection('recipes')">Recipes</a>
+      <a href="#about" class="nav-link" onclick="scrollToSection('about')">About</a>
+      <a href="#contact" class="nav-link" onclick="scrollToSection('contact')">Contact</a>
     </nav>
 
-    <!-- Header Right Actions -->
     <div class="header-right">
-      <!-- Delivery badge -->
       <div class="delivery-pill on" id="hDelBadge">
         <span class="dpulse"></span>
         <span id="hDelText">Delivery On</span>
       </div>
-
-      <!-- Dark mode toggle -->
-      <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode" id="darkBtn">🌙</button>
-
-      <!-- Language -->
-      <button class="icon-btn" onclick="toggleLang()" title="Language" id="langBtn">🌐 EN</button>
-
-      <!-- Notifications -->
-      <button class="icon-btn notif-btn" onclick="toggleNotif()" id="notifBtn">
-        🔔
-        <span class="notif-dot" id="notifDot"></span>
-      </button>
-
-      <!-- Wishlist -->
-      <button class="icon-btn" onclick="openWishlist()" title="Wishlist">
-        ❤️ <span id="wishCount" class="badge-count" style="display:none">0</span>
-      </button>
-
-      <!-- Admin -->
+      <button class="icon-btn" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
+      <button class="icon-btn" onclick="toggleLang()" id="langBtn">🌐 EN</button>
+      <button class="icon-btn notif-btn" onclick="toggleNotif()" id="notifBtn">🔔<span class="notif-dot" id="notifDot"></span></button>
+      <button class="icon-btn" onclick="openWishlist()">❤️ <span id="wishCount" class="badge-count" style="display:none">0</span></button>
       <button class="btn-admin" onclick="openAdmin()">⚙️ Admin</button>
-
-      <!-- Cart -->
-      <button class="btn-cart" onclick="openCart()">
-        🛒 Cart <span class="cart-badge" id="cartCount">0</span>
-      </button>
-
-      <!-- Hamburger -->
-      <button class="hamburger" onclick="toggleMobileNav()" id="hamburger">☰</button>
+      <button class="btn-cart" onclick="openCart()">🛒 Cart <span class="cart-badge" id="cartCount">0</span></button>
+      <button class="hamburger" onclick="toggleMobileNav()">☰</button>
     </div>
   </div>
-
-  <!-- Mobile Nav Drawer -->
   <div class="mobile-nav" id="mobileNav">
     <a href="#home" onclick="closeMobileNav()">🏠 Home</a>
     <a href="#products" onclick="closeMobileNav()">🛒 Shop</a>
@@ -83,26 +52,17 @@
   </div>
 </header>
 
-<!-- ══════════════════════════════════════════════
-     NOTIFICATION DROPDOWN
-══════════════════════════════════════════════ -->
 <div class="notif-panel" id="notifPanel">
   <div class="notif-header">🔔 Notifications</div>
   <div id="notifList"></div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     PROMO BANNER
-══════════════════════════════════════════════ -->
 <div class="promo-banner" id="promoBanner">
   <span>🎁 Use code <strong>DISSA10</strong> for 10% off your first order!</span>
   <button onclick="applyPromo('DISSA10')" class="promo-apply-btn">Apply Now</button>
   <button onclick="closeBanner()" class="promo-close">✕</button>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     HERO SECTION
-══════════════════════════════════════════════ -->
 <section class="hero" id="home">
   <div class="hero-bg-text">DISSA</div>
   <div class="hero-inner">
@@ -110,74 +70,36 @@
       <div class="hero-tag">🌿 Sri Lanka's Freshest Grocery</div>
       <h1>Fresh Groceries,<br><span class="hero-accent">Delivered Fast</span> 🌿</h1>
       <p>Your trusted neighbourhood supermarket. Quality products at unbeatable prices, delivered to your door — same day!</p>
-
       <div class="hero-search">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Search vegetables, fruits, dairy…" oninput="filterProducts()" />
         <button onclick="filterProducts()">Search</button>
       </div>
-
       <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-num" id="heroProductCount">0</div>
-          <div class="hero-stat-label">Products</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">LKR 200</div>
-          <div class="hero-stat-label">Delivery Fee</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">Daily</div>
-          <div class="hero-stat-label">Fresh Stock</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">5★</div>
-          <div class="hero-stat-label">Customer Rating</div>
-        </div>
+        <div class="hero-stat"><div class="hero-stat-num" id="heroProductCount">0</div><div class="hero-stat-label">Products</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">LKR 200</div><div class="hero-stat-label">Delivery Fee</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">Daily</div><div class="hero-stat-label">Fresh Stock</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">5★</div><div class="hero-stat-label">Customer Rating</div></div>
       </div>
-
       <div class="hero-actions">
         <button class="btn-hero-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">🛒 Shop Now</button>
         <button class="btn-hero-secondary" onclick="openWhatsApp()">💬 WhatsApp Us</button>
       </div>
     </div>
-
     <div class="hero-right">
-      <div class="hero-card float-card">
-        <div class="hero-card-title">Today's Special</div>
-        <div class="hero-card-value">🥭 Mangoes<br><span>In Season!</span></div>
-      </div>
-      <div class="hero-card float-card" style="animation-delay:.4s">
-        <div class="hero-card-title">Delivery Status</div>
-        <div class="hero-card-value" id="heroDelStatus">✅ Available</div>
-      </div>
-      <div class="hero-card float-card" style="animation-delay:.8s">
-        <div class="hero-card-title">Orders Today</div>
-        <div class="hero-card-value" id="heroOrderCount">0 Orders</div>
-      </div>
+      <div class="hero-card float-card"><div class="hero-card-title">Today's Special</div><div class="hero-card-value">🥭 Mangoes<br><span>In Season!</span></div></div>
+      <div class="hero-card float-card" style="animation-delay:.4s"><div class="hero-card-title">Delivery Status</div><div class="hero-card-value" id="heroDelStatus">✅ Available</div></div>
+      <div class="hero-card float-card" style="animation-delay:.8s"><div class="hero-card-title">Orders Today</div><div class="hero-card-value" id="heroOrderCount">0 Orders</div></div>
     </div>
   </div>
-
-  <!-- Scroll indicator -->
-  <div class="scroll-hint" onclick="document.getElementById('fresh-today').scrollIntoView({behavior:'smooth'})">
-    ↓ Explore Fresh Items
-  </div>
+  <div class="scroll-hint" onclick="document.getElementById('fresh-today').scrollIntoView({behavior:'smooth'})">↓ Explore Fresh Items</div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     FRESH TODAY SECTION
-══════════════════════════════════════════════ -->
 <section class="section" id="fresh-today">
-  <div class="section-header">
-    <h2 class="section-title">🥦 Fresh Today</h2>
-    <span class="section-sub">Handpicked this morning</span>
-  </div>
+  <div class="section-header"><h2 class="section-title">🥦 Fresh Today</h2><span class="section-sub">Handpicked this morning</span></div>
   <div class="fresh-strip" id="freshStrip"></div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     PROMO CODES BANNER
-══════════════════════════════════════════════ -->
 <div class="offer-strip">
   <div class="offer-item">🔥 Hot Deal: Mangoes 2-for-1</div>
   <div class="offer-item">💚 Free delivery over LKR 3000</div>
@@ -187,365 +109,98 @@
   <div class="offer-item">💚 Free delivery over LKR 3000</div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     PRODUCTS SECTION
-══════════════════════════════════════════════ -->
 <section class="section" id="products">
-  <div class="section-header">
-    <h2 class="section-title">Our Products</h2>
-    <span class="section-sub" id="productCountLabel"></span>
-  </div>
-
-  <!-- Sort & Filter bar -->
+  <div class="section-header"><h2 class="section-title">Our Products</h2><span class="section-sub" id="productCountLabel"></span></div>
   <div class="filter-bar">
     <div class="categories" id="categoriesBar"></div>
     <div class="sort-row">
-      <select id="sortSelect" onchange="sortProducts()" class="sort-select">
-        <option value="default">Sort: Default</option>
-        <option value="price-asc">Price: Low → High</option>
-        <option value="price-desc">Price: High → Low</option>
-        <option value="name">Name A-Z</option>
-      </select>
-      <select id="stockFilter" onchange="filterProducts()" class="sort-select">
-        <option value="all">All Items</option>
-        <option value="instock">In Stock Only</option>
-      </select>
+      <select id="sortSelect" onchange="sortProducts()" class="sort-select"><option value="default">Sort: Default</option><option value="price-asc">Price: Low → High</option><option value="price-desc">Price: High → Low</option><option value="name">Name A-Z</option></select>
+      <select id="stockFilter" onchange="filterProducts()" class="sort-select"><option value="all">All Items</option><option value="instock">In Stock Only</option></select>
     </div>
   </div>
-
   <div class="products-grid" id="productsGrid"></div>
-
-  <!-- Load More -->
-  <div style="text-align:center;margin-top:32px;">
-    <button class="btn-loadmore" id="loadMoreBtn" onclick="loadMore()" style="display:none">Load More Products ↓</button>
-  </div>
+  <div style="text-align:center;margin-top:32px;"><button class="btn-loadmore" id="loadMoreBtn" onclick="loadMore()" style="display:none">Load More Products ↓</button></div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     RECIPES SECTION
-══════════════════════════════════════════════ -->
 <section class="section" id="recipes">
-  <div class="section-header">
-    <h2 class="section-title">🍳 Cooking Recipes</h2>
-    <span class="section-sub">Made with our fresh products</span>
-  </div>
+  <div class="section-header"><h2 class="section-title">🍳 Cooking Recipes</h2><span class="section-sub">Made with our fresh products</span></div>
   <div class="recipes-grid" id="recipesGrid"></div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     ABOUT SECTION
-══════════════════════════════════════════════ -->
 <section class="section about-section" id="about">
   <div class="about-grid">
     <div class="about-text">
       <h2 class="section-title">🌿 About DISSA SUPER</h2>
-      <p id="aboutText">We are a trusted Sri Lankan neighbourhood supermarket committed to bringing the freshest groceries right to your doorstep. Founded with a passion for quality and affordability, DISSA SUPER sources directly from local farmers and trusted suppliers.</p>
+      <p id="aboutText">We are a trusted Sri Lankan neighbourhood supermarket committed to bringing the freshest groceries right to your doorstep.</p>
       <p style="margin-top:14px" id="aboutText2">From farm-fresh vegetables to daily dairy, we stock everything your family needs — delivered fast or ready for pickup.</p>
-      <div class="about-features">
-        <div class="about-feat">✅ 100% Fresh Daily</div>
-        <div class="about-feat">🚚 Same-Day Delivery</div>
-        <div class="about-feat">💰 Best Prices in Town</div>
-        <div class="about-feat">🤝 Trusted by 1000+ Families</div>
-      </div>
+      <div class="about-features"><div class="about-feat">✅ 100% Fresh Daily</div><div class="about-feat">🚚 Same-Day Delivery</div><div class="about-feat">💰 Best Prices in Town</div><div class="about-feat">🤝 Trusted by 1000+ Families</div></div>
     </div>
     <div class="about-map-wrap">
-      <div class="map-placeholder" onclick="openMap()">
-        <div style="font-size:48px">📍</div>
-        <p style="font-weight:700;margin-top:8px">Click to View on Google Maps</p>
-        <p style="font-size:13px;opacity:.7" id="addressDisplay">123 Main Street, Colombo, Sri Lanka</p>
-      </div>
-      <div class="store-hours">
-        <h4>🕐 Store Hours</h4>
-        <div class="hours-row"><span>Mon – Fri</span><span>7:00 AM – 9:00 PM</span></div>
-        <div class="hours-row"><span>Saturday</span><span>7:00 AM – 8:00 PM</span></div>
-        <div class="hours-row"><span>Sunday</span><span>8:00 AM – 6:00 PM</span></div>
-      </div>
+      <div class="map-placeholder" onclick="openMap()"><div style="font-size:48px">📍</div><p style="font-weight:700;margin-top:8px">Click to View on Google Maps</p><p style="font-size:13px;opacity:.7" id="addressDisplay">123 Main Street, Colombo, Sri Lanka</p></div>
+      <div class="store-hours"><h4>🕐 Store Hours</h4><div class="hours-row"><span>Mon – Fri</span><span id="hoursWeekday">7:00 AM – 9:00 PM</span></div><div class="hours-row"><span>Saturday</span><span id="hoursSat">7:00 AM – 8:00 PM</span></div><div class="hours-row"><span>Sunday</span><span id="hoursSun">8:00 AM – 6:00 PM</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     REVIEWS SECTION
-══════════════════════════════════════════════ -->
 <section class="section" id="reviews">
-  <div class="section-header">
-    <h2 class="section-title">⭐ Customer Reviews</h2>
-    <span class="section-sub">What our customers say</span>
-  </div>
+  <div class="section-header"><h2 class="section-title">⭐ Customer Reviews</h2><span class="section-sub">What our customers say</span></div>
   <div class="reviews-grid" id="reviewsGrid"></div>
-  <div style="text-align:center;margin-top:28px;">
-    <button class="btn-hero-primary" onclick="openReviewForm()">✍️ Write a Review</button>
-  </div>
+  <div style="text-align:center;margin-top:28px;"><button class="btn-hero-primary" onclick="openReviewForm()">✍️ Write a Review</button></div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     CONTACT SECTION
-══════════════════════════════════════════════ -->
 <section class="section contact-section" id="contact">
-  <div class="section-header">
-    <h2 class="section-title">📞 Contact Us</h2>
-    <span class="section-sub">We're here to help</span>
-  </div>
+  <div class="section-header"><h2 class="section-title">📞 Contact Us</h2><span class="section-sub">We're here to help</span></div>
   <div class="contact-grid">
     <div class="contact-info">
-      <div class="contact-card" onclick="openWhatsApp()">
-        <span class="ccard-icon">💬</span>
-        <div>
-          <div class="ccard-title">WhatsApp</div>
-          <div class="ccard-val" id="whatsappDisplay">+94 77 123 4567</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <span class="ccard-icon">📞</span>
-        <div>
-          <div class="ccard-title">Phone</div>
-          <div class="ccard-val" id="phoneDisplay">+94 11 234 5678</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <span class="ccard-icon">📧</span>
-        <div>
-          <div class="ccard-title">Email</div>
-          <div class="ccard-val" id="emailDisplay">hello@dissasuper.lk</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <span class="ccard-icon">📍</span>
-        <div>
-          <div class="ccard-title">Address</div>
-          <div class="ccard-val" id="addressDisplay2">123 Main St, Colombo 7, Sri Lanka</div>
-        </div>
-      </div>
+      <div class="contact-card" onclick="openWhatsApp()"><span class="ccard-icon">💬</span><div><div class="ccard-title">WhatsApp</div><div class="ccard-val" id="whatsappDisplay">+94 77 123 4567</div></div></div>
+      <div class="contact-card"><span class="ccard-icon">📞</span><div><div class="ccard-title">Phone</div><div class="ccard-val" id="phoneDisplay">+94 11 234 5678</div></div></div>
+      <div class="contact-card"><span class="ccard-icon">📧</span><div><div class="ccard-title">Email</div><div class="ccard-val" id="emailDisplay">hello@dissasuper.lk</div></div></div>
+      <div class="contact-card"><span class="ccard-icon">📍</span><div><div class="ccard-title">Address</div><div class="ccard-val" id="addressDisplay2">123 Main St, Colombo 7, Sri Lanka</div></div></div>
     </div>
-    <form class="contact-form" onsubmit="submitContact(event)">
-      <h3 style="font-size:18px;font-weight:700;margin-bottom:18px">Send Us a Message</h3>
-      <div class="form-group">
-        <label>Your Name</label>
-        <input id="cf_name" placeholder="Full name" required />
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input id="cf_email" type="email" placeholder="your@email.com" required />
-      </div>
-      <div class="form-group">
-        <label>Message</label>
-        <textarea id="cf_msg" placeholder="How can we help you?" rows="4" required></textarea>
-      </div>
+    <form class="contact-form" onsubmit="submitContact(event)"><h3 style="font-size:18px;font-weight:700;margin-bottom:18px">Send Us a Message</h3>
+      <div class="form-group"><label>Your Name</label><input id="cf_name" placeholder="Full name" required /></div>
+      <div class="form-group"><label>Email Address</label><input id="cf_email" type="email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Message</label><textarea id="cf_msg" placeholder="How can we help you?" rows="4" required></textarea></div>
       <button type="submit" class="btn-hero-primary" style="width:100%">📨 Send Message</button>
     </form>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="f-logo">🛒 DISSA SUPER</div>
-      <p>Your trusted neighbourhood supermarket<br>Fresh · Fast · Affordable · Sri Lanka</p>
-      <div class="social-links">
-        <button onclick="openWhatsApp()" class="social-btn">💬</button>
-        <button class="social-btn">📘</button>
-        <button class="social-btn">📸</button>
-        <button class="social-btn">🐦</button>
-      </div>
-    </div>
-    <div class="footer-links">
-      <h4>Quick Links</h4>
-      <a href="#home">Home</a>
-      <a href="#products">Products</a>
-      <a href="#fresh-today">Fresh Today</a>
-      <a href="#recipes">Recipes</a>
-      <a href="#about">About Us</a>
-      <a href="#contact">Contact</a>
-    </div>
-    <div class="footer-links">
-      <h4>Categories</h4>
-      <a href="#products">🥦 Vegetables</a>
-      <a href="#products">🍎 Fruits</a>
-      <a href="#products">🥛 Dairy</a>
-      <a href="#products">🌾 Dry Goods</a>
-      <a href="#products">🍞 Bakery</a>
-      <a href="#products">🍗 Meat &amp; Fish</a>
-    </div>
-    <div class="footer-links">
-      <h4>Info</h4>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Delivery Policy</a>
-      <a href="#" onclick="openAdmin()">Admin Panel</a>
-    </div>
-    <div class="footer-newsletter">
-      <h4>Newsletter</h4>
-      <p>Get weekly offers &amp; fresh arrivals</p>
-      <div class="newsletter-row">
-        <input id="nlEmail" type="email" placeholder="your@email.com" />
-        <button onclick="subscribeNewsletter()">→</button>
-      </div>
-    </div>
+    <div class="footer-brand"><div class="f-logo">🛒 DISSA SUPER</div><p>Your trusted neighbourhood supermarket<br>Fresh · Fast · Affordable · Sri Lanka</p><div class="social-links"><button onclick="openWhatsApp()" class="social-btn">💬</button><button class="social-btn">📘</button><button class="social-btn">📸</button><button class="social-btn">🐦</button></div></div>
+    <div class="footer-links"><h4>Quick Links</h4><a href="#home">Home</a><a href="#products">Products</a><a href="#fresh-today">Fresh Today</a><a href="#recipes">Recipes</a><a href="#about">About Us</a><a href="#contact">Contact</a></div>
+    <div class="footer-links"><h4>Categories</h4><a href="#products">🥦 Vegetables</a><a href="#products">🍎 Fruits</a><a href="#products">🥛 Dairy</a><a href="#products">🌾 Dry Goods</a><a href="#products">🍞 Bakery</a><a href="#products">🍗 Meat &amp; Fish</a></div>
+    <div class="footer-links"><h4>Info</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Delivery Policy</a><a href="#" onclick="openAdmin()">Admin Panel</a></div>
+    <div class="footer-newsletter"><h4>Newsletter</h4><p>Get weekly offers &amp; fresh arrivals</p><div class="newsletter-row"><input id="nlEmail" type="email" placeholder="your@email.com" /><button onclick="subscribeNewsletter()">→</button></div></div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2024 DISSA SUPER. All rights reserved.</span>
-    <span>Made with ❤️ in Sri Lanka</span>
-  </div>
+  <div class="footer-bottom"><span>© 2024 DISSA SUPER. All rights reserved.</span><span>Made with ❤️ in Sri Lanka</span></div>
 </footer>
 
-<!-- ══════════════════════════════════════════════
-     CART SIDEBAR
-══════════════════════════════════════════════ -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <h2>🛒 Your Cart</h2>
-    <button class="close-x" onclick="closeCart()">✕</button>
-  </div>
-
-  <!-- Promo code input inside cart -->
-  <div class="cart-promo">
-    <input id="promoInput" placeholder="🎁 Promo code (e.g. DISSA10)" />
-    <button onclick="applyPromoFromCart()">Apply</button>
-  </div>
-
+  <div class="cart-header"><h2>🛒 Your Cart</h2><button class="close-x" onclick="closeCart()">✕</button></div>
+  <div class="cart-promo"><input id="promoInput" placeholder="🎁 Promo code (e.g. DISSA10)" /><button onclick="applyPromoFromCart()">Apply</button></div>
   <div class="cart-body" id="cartBody"></div>
   <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-totals">
-      <div class="cart-row"><span>Subtotal</span><span id="cartSubtotal">LKR 0</span></div>
-      <div class="cart-row discount-row" id="discountRow" style="display:none"><span>🎁 Discount</span><span id="discountAmt" style="color:var(--green)">-LKR 0</span></div>
-      <div class="cart-row"><span>Delivery</span><span id="cartDeliveryFee">LKR 200</span></div>
-      <div class="cart-row total"><span>Total</span><span id="cartTotal">LKR 0</span></div>
-    </div>
-    <div class="del-note" id="delNote"></div>
-    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+    <div class="cart-totals"><div class="cart-row"><span>Subtotal</span><span id="cartSubtotal">LKR 0</span></div><div class="cart-row discount-row" id="discountRow" style="display:none"><span>🎁 Discount</span><span id="discountAmt" style="color:var(--green)">-LKR 0</span></div><div class="cart-row"><span>Delivery</span><span id="cartDeliveryFee">LKR 200</span></div><div class="cart-row total"><span>Total</span><span id="cartTotal">LKR 0</span></div></div>
+    <div class="del-note" id="delNote"></div><button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     WISHLIST SIDEBAR
-══════════════════════════════════════════════ -->
 <div class="wishlist-overlay" id="wishlistOverlay" onclick="closeWishlist()"></div>
-<div class="cart-sidebar" id="wishlistSidebar" style="right:unset;left:0;transform:translateX(-100%)">
-  <div class="cart-header">
-    <h2>❤️ Wishlist</h2>
-    <button class="close-x" onclick="closeWishlist()">✕</button>
-  </div>
-  <div class="cart-body" id="wishlistBody"></div>
-</div>
+<div class="cart-sidebar" id="wishlistSidebar" style="right:unset;left:0;transform:translateX(-100%)"><div class="cart-header"><h2>❤️ Wishlist</h2><button class="close-x" onclick="closeWishlist()">✕</button></div><div class="cart-body" id="wishlistBody"></div></div>
 
-<!-- ══════════════════════════════════════════════
-     CHECKOUT MODAL
-══════════════════════════════════════════════ -->
-<div class="modal-overlay" id="checkoutModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h2>📋 Checkout</h2>
-      <button class="close-x" onclick="closeCheckout()">✕</button>
-    </div>
-    <div class="modal-body" id="checkoutBody"></div>
-  </div>
-</div>
+<div class="modal-overlay" id="checkoutModal"><div class="modal"><div class="modal-head"><h2>📋 Checkout</h2><button class="close-x" onclick="closeCheckout()">✕</button></div><div class="modal-body" id="checkoutBody"></div></div></div>
+<div class="modal-overlay" id="loginModal"><div class="modal"><div class="modal-head"><h2 id="authTitle">👤 Login</h2><button class="close-x" onclick="closeLogin()">✕</button></div><div class="modal-body" id="loginBody"></div></div></div>
+<div class="modal-overlay" id="reviewModal"><div class="modal" style="max-width:480px"><div class="modal-head"><h2>⭐ Write a Review</h2><button class="close-x" onclick="closeReviewForm()">✕</button></div><div class="modal-body"><div class="form-group"><label>Your Name</label><input id="rv_name" placeholder="Your name" /></div><div class="form-group"><label>Rating</label><div class="star-rating" id="starRating"><span onclick="setRating(1)">⭐</span><span onclick="setRating(2)">⭐</span><span onclick="setRating(3)">⭐</span><span onclick="setRating(4)">⭐</span><span onclick="setRating(5)">⭐</span></div></div><div class="form-group"><label>Your Review</label><textarea id="rv_text" placeholder="Tell us about your experience…" rows="4"></textarea></div><button class="btn-hero-primary" style="width:100%" onclick="submitReview()">Submit Review</button></div></div></div>
 
-<!-- ══════════════════════════════════════════════
-     LOGIN / SIGNUP MODAL
-══════════════════════════════════════════════ -->
-<div class="modal-overlay" id="loginModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="authTitle">👤 Login</h2>
-      <button class="close-x" onclick="closeLogin()">✕</button>
-    </div>
-    <div class="modal-body" id="loginBody"></div>
-  </div>
-</div>
+<div class="admin-overlay" id="adminOverlay"><div class="admin-panel"><div class="admin-top"><div><h2>⚙️ Admin Panel</h2><p>DISSA SUPER — Manage your store</p></div><button class="close-x" style="background:rgba(255,255,255,.2);color:white;border-color:rgba(255,255,255,.3);" onclick="closeAdmin()">✕</button></div><div class="admin-nav"><button class="admin-nav-btn active" onclick="adminTab('dashboard',this)">📊 Dashboard</button><button class="admin-nav-btn" onclick="adminTab('products',this)">📦 Products</button><button class="admin-nav-btn" onclick="adminTab('delivery',this)">🚚 Delivery</button><button class="admin-nav-btn" onclick="adminTab('orders',this)">📋 Orders</button><button class="admin-nav-btn" onclick="adminTab('users',this)">👤 Users</button><button class="admin-nav-btn" onclick="adminTab('analytics',this)">📈 Analytics</button><button class="admin-nav-btn" onclick="adminTab('shopinfo',this)">🏪 Shop Info</button></div><div class="admin-body" id="adminBody"></div></div></div>
 
-<!-- ══════════════════════════════════════════════
-     REVIEW MODAL
-══════════════════════════════════════════════ -->
-<div class="modal-overlay" id="reviewModal">
-  <div class="modal" style="max-width:480px">
-    <div class="modal-head">
-      <h2>⭐ Write a Review</h2>
-      <button class="close-x" onclick="closeReviewForm()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group"><label>Your Name</label><input id="rv_name" placeholder="Your name" /></div>
-      <div class="form-group">
-        <label>Rating</label>
-        <div class="star-rating" id="starRating">
-          <span onclick="setRating(1)">⭐</span><span onclick="setRating(2)">⭐</span>
-          <span onclick="setRating(3)">⭐</span><span onclick="setRating(4)">⭐</span>
-          <span onclick="setRating(5)">⭐</span>
-        </div>
-      </div>
-      <div class="form-group"><label>Your Review</label><textarea id="rv_text" placeholder="Tell us about your experience…" rows="4"></textarea></div>
-      <button class="btn-hero-primary" style="width:100%" onclick="submitReview()">Submit Review</button>
-    </div>
-  </div>
-</div>
+<div class="chat-fab-group"><button class="wa-fab" onclick="openWhatsApp()" title="WhatsApp Us">💬</button><button class="chat-fab" onclick="toggleChat()" id="chatFab">🤖<span class="chat-notif" id="chatNotif" style="display:none">1</span></button></div>
+<div class="chat-window" id="chatWindow"><div class="chat-head"><div class="chat-ava">🥬</div><div class="chat-head-info"><h4>DISSA Assistant</h4><p><span class="chat-online-dot"></span>Online · AI Powered</p></div><button class="chat-close-btn" onclick="toggleChat()">✕</button></div><div class="chat-msgs" id="chatMsgs"></div><div class="quick-chips" id="quickChips"></div><div class="chat-input-row"><input class="chat-inp" id="chatInp" placeholder="Ask me anything…" onkeydown="if(event.key==='Enter')sendChat()" /><button class="chat-send-btn" onclick="sendChat()">➤</button></div></div>
 
-<!-- ══════════════════════════════════════════════
-     ADMIN PANEL
-══════════════════════════════════════════════ -->
-<div class="admin-overlay" id="adminOverlay">
-  <div class="admin-panel">
-    <div class="admin-top">
-      <div>
-        <h2>⚙️ Admin Panel</h2>
-        <p>DISSA SUPER — Manage your store</p>
-      </div>
-      <button class="close-x" style="background:rgba(255,255,255,.2);color:white;border-color:rgba(255,255,255,.3);" onclick="closeAdmin()">✕</button>
-    </div>
-    <div class="admin-nav">
-      <button class="admin-nav-btn active" onclick="adminTab('dashboard',this)">📊 Dashboard</button>
-      <button class="admin-nav-btn" onclick="adminTab('products',this)">📦 Products</button>
-      <button class="admin-nav-btn" onclick="adminTab('delivery',this)">🚚 Delivery</button>
-      <button class="admin-nav-btn" onclick="adminTab('orders',this)">📋 Orders</button>
-      <button class="admin-nav-btn" onclick="adminTab('users',this)">👤 Users</button>
-      <button class="admin-nav-btn" onclick="adminTab('analytics',this)">📈 Analytics</button>
-      <button class="admin-nav-btn" onclick="adminTab('shopinfo',this)">🏪 Shop Info</button>
-    </div>
-    <div class="admin-body" id="adminBody"></div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════
-     AI CHATBOT
-══════════════════════════════════════════════ -->
-<div class="chat-fab-group">
-  <!-- WhatsApp -->
-  <button class="wa-fab" onclick="openWhatsApp()" title="WhatsApp Us">💬</button>
-  <!-- AI Chat -->
-  <button class="chat-fab" onclick="toggleChat()" id="chatFab">
-    🤖
-    <span class="chat-notif" id="chatNotif" style="display:none">1</span>
-  </button>
-</div>
-
-<div class="chat-window" id="chatWindow">
-  <div class="chat-head">
-    <div class="chat-ava">🥬</div>
-    <div class="chat-head-info">
-      <h4>DISSA Assistant</h4>
-      <p><span class="chat-online-dot"></span>Online · AI Powered</p>
-    </div>
-    <button class="chat-close-btn" onclick="toggleChat()">✕</button>
-  </div>
-  <div class="chat-msgs" id="chatMsgs"></div>
-  <div class="quick-chips" id="quickChips"></div>
-  <div class="chat-input-row">
-    <input class="chat-inp" id="chatInp" placeholder="Ask me anything…" onkeydown="if(event.key==='Enter')sendChat()" />
-    <button class="chat-send-btn" onclick="sendChat()">➤</button>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════
-     TOAST
-══════════════════════════════════════════════ -->
 <div class="toast" id="toast"></div>
-
-<!-- ══════════════════════════════════════════════
-     BACK TO TOP
-══════════════════════════════════════════════ -->
 <button class="back-to-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script src="script.js"></script>
