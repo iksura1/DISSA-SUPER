@@ -23,10 +23,10 @@ let currentLang = 'en';
 // Shop Information
 let shopInfo = JSON.parse(localStorage.getItem('dissaShopInfo') || 'null') || {
   shopName: 'DISSA SUPER',
-  address: '123 Main Street, Colombo 7, Sri Lanka',
-  phone: '+94 11 234 5678',
-  whatsapp: '+94 77 123 4567',
-  email: 'hello@dissasuper.lk',
+  address: '210/C Dalupitiya Kadawatha',
+  phone: '+94 74 188 7910',
+  whatsapp: '+94 74 188 7910',
+  email: 'dissasuper.lk',
   aboutText: 'We are a trusted Sri Lankan neighbourhood supermarket committed to bringing the freshest groceries right to your doorstep.',
   aboutText2: 'From farm-fresh vegetables to daily dairy, we stock everything your family needs — delivered fast or ready for pickup.',
   mapLink: 'https://maps.google.com/?q=Colombo+Sri+Lanka',
