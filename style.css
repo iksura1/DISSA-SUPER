@@ -1,3 +1,21 @@
+/* ==================== FIXED NOTIFICATIONS - LIMITED SIZE ==================== */
+.notif-panel {
+  max-height: 350px;
+  overflow-y: auto;
+  width: 300px;
+  max-width: calc(100vw - 40px);
+}
+
+.notif-item {
+  padding: 10px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
 /* ==================== FIXED ADMIN BUTTONS ALIGNMENT ==================== */
 .a-prod-item {
   display: flex;
@@ -86,35 +104,7 @@
   }
 }
 
-/* Notification panel - limited height */
-.notif-panel {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.notif-item {
-  padding: 10px 12px;
-  font-size: 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.notif-item:last-child {
-  border-bottom: none;
-}
-
-/* Checkout modal fix */
-.modal {
-  max-width: 500px;
-  max-height: 85vh;
-  overflow-y: auto;
-}
-
-.order-summary {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-/* Image error handling */
+/* ==================== IMAGE ERROR HANDLING ==================== */
 .product-img img {
   width: 100%;
   height: 100%;
@@ -129,4 +119,92 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+
+/* ==================== CHECKOUT MODAL FIX ==================== */
+.modal {
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.order-summary {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.order-type-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.otype-btn {
+  flex: 1;
+  padding: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.otype-btn.active {
+  background: var(--green-pale);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.otype-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.place-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.success-wrap {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.success-wrap .s-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.order-ref {
+  background: var(--green-pale);
+  color: var(--green);
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 16px 0;
+  font-size: 16px;
+}
+
+.points-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+  color: white;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 8px;
 }
