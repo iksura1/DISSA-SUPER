@@ -353,3 +353,214 @@ footer { background: var(--text); color: white; padding: 30px 16px 0; margin-top
     display: none !important;
 }
 
+
+/* ==================== MOBILE DISPLAY FIXES ==================== */
+
+/* 1. Dark Mode සහ Cart Alignment Fix */
+@media (max-width: 768px) {
+  /* Cart Button Alignment */
+  .btn-cart {
+    padding: 4px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  
+  .cart-badge {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+  
+  /* Header Right Area - Better Alignment */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+  
+  /* Hide less important buttons on mobile */
+  .icon-btn:nth-child(2), /* Language */
+  .icon-btn:nth-child(3) { /* Dark mode toggle - move to menu */
+    display: none;
+  }
+  
+  /* Categories Bar - Horizontal Scroll */
+  .categories {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  .cat-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 11px;
+    padding: 6px 14px;
+  }
+  
+  /* Products Grid - 2 columns exactly */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  /* Product Card */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .product-img {
+    height: 120px;
+  }
+  
+  .product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+  }
+  
+  .product-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  
+  .current-price {
+    font-size: 14px;
+  }
+  
+  .add-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+  
+  .qty-ctrl {
+    gap: 3px;
+  }
+  
+  .qty-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .qty-num {
+    font-size: 12px;
+    min-width: 18px;
+  }
+}
+
+/* 2. Dark Mode Mobile Specific */
+[data-theme="dark"] {
+  --surface: #1e2820;
+  --bg: #121a13;
+  --text: #e8f5ee;
+  --border: #2d4a35;
+}
+
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+  body {
+    background: var(--bg);
+    color: var(--text);
+  }
+  
+  .product-card, .cart-sidebar, .admin-panel {
+    background: var(--surface);
+    border-color: var(--border);
+  }
+}
+
+/* 3. Cart Sidebar Mobile Fix */
+@media (max-width: 768px) {
+  .cart-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .cart-header h2 {
+    font-size: 16px;
+  }
+  
+  .cart-item-icon {
+    font-size: 24px;
+    width: 36px;
+  }
+  
+  .cart-item-name {
+    font-size: 12px;
+  }
+  
+  .cart-item-total {
+    font-size: 12px;
+  }
+  
+  .cart-totals {
+    padding: 8px 10px;
+  }
+  
+  .cart-row {
+    font-size: 12px;
+  }
+  
+  .checkout-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* 4. Category Bar - Better Scrolling */
+.categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+}
+
+.cat-btn {
+  scroll-snap-align: start;
+}
+
+/* Hide scrollbar for cleaner look */
+.categories::-webkit-scrollbar {
+  height: 3px;
+}
+
+.categories::-webkit-scrollbar-track {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.categories::-webkit-scrollbar-thumb {
+  background: var(--green);
+  border-radius: 3px;
+}
+
+/* 5. Night Mode Toggle Button - Make it visible on mobile */
+@media (max-width: 768px) {
+  .icon-btn:first-of-type {
+    display: flex !important; /* Show dark mode toggle */
+  }
+  
+  /* Add dark mode toggle to mobile menu */
+  .mobile-nav .dark-mode-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+}
