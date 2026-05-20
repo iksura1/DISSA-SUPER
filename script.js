@@ -53,7 +53,7 @@ let NOTIFICATIONS = JSON.parse(localStorage.getItem('dissaNotifications') || 'nu
 // ==================== DEFAULT DATA ====================
 function getDefaultProducts() {
   return [
-    { id: 1, name: 'Fresh Tomatoes', category: 'Vegetables', price: 120, originalPrice: 150, unit: '500g', imageUrl: '', emoji: '🍅', badge: 'Fresh', stock: 85 },
+    { id: 1, name: 'Fresh Tomatoes', category: 'Vegetables', price: 120, originalPrice: 150, unit: '500g', imageUrl: 'https://i.imgur.com/MaANaQV.jpeg', emoji: '🍅', badge: 'Fresh', stock: 85 },
     { id: 2, name: 'Carrots', category: 'Vegetables', price: 90, originalPrice: 120, unit: '500g', imageUrl: '', emoji: '🥕', badge: '', stock: 70 },
     { id: 3, name: 'Broccoli', category: 'Vegetables', price: 280, originalPrice: 320, unit: '1 head', imageUrl: '', emoji: '🥦', badge: 'Fresh', stock: 40 },
     { id: 4, name: 'Cabbage', category: 'Vegetables', price: 150, originalPrice: 180, unit: '1 head', imageUrl: '', emoji: '🥬', badge: '', stock: 60 },
