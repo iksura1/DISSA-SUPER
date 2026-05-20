@@ -1,13 +1,4 @@
-/* Notifications සම්පූර්ණයෙන්ම අයින් කරනවා */
-.notif-panel, 
-.notif-btn, 
-#notifBtn, 
-#notifDot, 
-#notifPanel,
-.notification-icon,
-.notification-badge {
-    display: none !important;
-}
+
 /* DISSA SUPER - Complete Stylesheet */
 
 :root {
@@ -341,3 +332,24 @@ footer { background: var(--text); color: white; padding: 30px 16px 0; margin-top
   .a-prod-info { width: 100%; margin-bottom: 8px; }
   .btn-edit, .btn-del { flex: 1; text-align: center; }
 }
+
+/* Notifications සම්පූර්ණයෙන්ම අයින් කරනවා */
+.notif-panel,
+.notif-btn,
+#notifBtn,
+#notifDot,
+#notifPanel,
+.notification-icon,
+.notification-badge,
+.notif-header,
+.notif-item,
+[class*="notif"],
+[id*="notif"] {
+    display: none !important;
+}
+
+/* Promo Banner එකත් අයින් කරනවා (අවශ්‍ය නම්) */
+.promo-banner {
+    display: none !important;
+}
+
