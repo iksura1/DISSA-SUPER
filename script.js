@@ -29,11 +29,10 @@ let shopInfo = JSON.parse(localStorage.getItem('dissaShopInfo') || 'null') || {
   email: 'dissasuper.lk',
   aboutText: 'We are a trusted Sri Lankan neighbourhood supermarket committed to bringing the freshest groceries right to your doorstep.',
   aboutText2: 'From farm-fresh vegetables to daily dairy, we stock everything your family needs — delivered fast or ready for pickup.',
-  mapLink: 'https://maps.google.com/?q=Colombo+Sri+Lanka',
+  mapLink: 'https://maps.app.goo.gl/Ma85NQy1ww3c4WW96',
   openingHours: {
-    weekdays: '7:00 AM – 9:00 PM',
-    saturday: '7:00 AM – 8:00 PM',
-    sunday: '8:00 AM – 6:00 PM'
+    everyday: '9:00 AM – 11:00 PM',
+    
   }
 };
 
