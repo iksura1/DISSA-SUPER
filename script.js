@@ -1,18 +1,5 @@
-// Force image reload on mobile devices
-if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    // Add timestamp to all product images
-    window.addEventListener('load', function() {
-        const images = document.querySelectorAll('.product-img img');
-        images.forEach(img => {
-            const originalSrc = img.src;
-            if (originalSrc && !originalSrc.includes('?')) {
-                img.src = originalSrc + '?t=' + Date.now();
-            }
-        });
-    });
-}
 /* DISSA SUPER - COMPLETE WORKING VERSION */
-/* Image URL Support + Limited Notifications (3 max) + Live Updates */
+/* Admin Panel Changes Live Update + Mobile Image Fix */
 
 'use strict';
 
@@ -63,7 +50,7 @@ let NOTIFICATIONS = JSON.parse(localStorage.getItem('dissaNotifications') || 'nu
   { id: 3, text: '🚚 Free delivery over LKR 3000', time: '1 hr ago', read: false },
 ];
 
-// ==================== DEFAULT DATA WITH IMAGE URL SUPPORT ====================
+// ==================== DEFAULT DATA ====================
 function getDefaultProducts() {
   return [
     { id: 1, name: 'Fresh Tomatoes', category: 'Vegetables', price: 120, originalPrice: 150, unit: '500g', imageUrl: '', emoji: '🍅', badge: 'Fresh', stock: 85 },
@@ -110,9 +97,17 @@ function saveProducts() { localStorage.setItem('dissaProducts', JSON.stringify(p
 function saveOrders() { localStorage.setItem('dissaOrders', JSON.stringify(orders)); }
 function saveShopInfo() { localStorage.setItem('dissaShopInfo', JSON.stringify(shopInfo)); updateShopInfoDisplay(); }
 function saveNotifications() { 
-  // Keep only last 3 notifications
   NOTIFICATIONS = NOTIFICATIONS.slice(0, 3);
   localStorage.setItem('dissaNotifications', JSON.stringify(NOTIFICATIONS)); 
+}
+
+// Force reload products from localStorage
+function loadProductsFromStorage() {
+  const stored = localStorage.getItem('dissaProducts');
+  if (stored) {
+    products = JSON.parse(stored);
+  }
+  return products;
 }
 
 function updateShopInfoDisplay() {
@@ -142,7 +137,6 @@ function updateShopInfoDisplay() {
 
 function addNotification(text) {
   NOTIFICATIONS.unshift({ id: Date.now(), text: text, time: 'Just now', read: false });
-  // Keep only last 3
   if (NOTIFICATIONS.length > 3) NOTIFICATIONS.pop();
   saveNotifications();
   renderNotifications();
@@ -303,6 +297,9 @@ function escapeHtml(str) {
 }
 
 function renderProducts() {
+  // Force reload products from localStorage to ensure latest data
+  loadProductsFromStorage();
+  
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
   const list = getFilteredProducts();
@@ -331,10 +328,22 @@ function renderProducts() {
     const hasDiscount = p.originalPrice && p.originalPrice > p.price;
     const discountPercent = hasDiscount ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
     
-    // Image URL support - use imageUrl if available, otherwise emoji
-    const imageHtml = p.imageUrl && p.imageUrl.trim() !== '' 
-      ? `<img src="${p.imageUrl}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><span class="emoji-fallback" style="display:none">${p.emoji}</span>`
-      : `<span class="emoji-fallback">${p.emoji}</span>`;
+    // Image URL support with better mobile handling
+    let imageHtml = '';
+    if (p.imageUrl && p.imageUrl.trim() !== '' && p.imageUrl.startsWith('http')) {
+      // Add timestamp to prevent caching issues on mobile
+      const cacheBuster = '?t=' + Date.now();
+      imageHtml = `<img src="${p.imageUrl}${cacheBuster}" 
+                      alt="${escapeHtml(p.name)}" 
+                      loading="lazy"
+                      crossorigin="anonymous"
+                      onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                      style="width:100%; height:100%; object-fit:cover;" />
+                   <span class="emoji-fallback" style="display:none">${p.emoji}</span>`;
+    } else {
+      // No image URL - show emoji (this works 100% on mobile!)
+      imageHtml = `<span class="emoji-fallback" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:56px;">${p.emoji}</span>`;
+    }
 
     return `<div class="product-card">
       <div class="product-img" onclick="showProductDetail(${p.id})">
@@ -768,6 +777,9 @@ function toggleDelivery() {
 }
 
 function renderAdminProducts() {
+  // Force reload products from localStorage
+  loadProductsFromStorage();
+  
   const body = document.getElementById('adminBody');
   if (!body) return;
   body.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
@@ -869,26 +881,28 @@ function saveProd() {
       products[idx] = { ...products[idx], name, category, price, originalPrice, unit, emoji, badge, stock, imageUrl };
       showToast('✅ Product updated!');
       addNotification(`✏️ Product "${name}" was updated`);
-      // Re-render everything to show changes immediately
-      renderCats();
-      renderProducts();
-      renderFreshStrip();
-      renderAdminProducts();
     }
   } else {
     const newId = Math.max(...products.map(p => p.id), 0) + 1;
     products.push({ id: newId, name, category, price, originalPrice, unit, emoji, badge, stock, imageUrl });
     showToast('✅ Product added!');
     addNotification(`➕ New product "${name}" was added`);
-    // Re-render everything to show changes immediately
-    renderCats();
-    renderProducts();
-    renderFreshStrip();
-    renderAdminProducts();
   }
   
+  // Save to localStorage
   saveProducts();
+  
+  // Clear form and editing state
   editingId = null;
+  cancelProdForm();
+  
+  // FORCE RE-RENDER everything to show changes immediately
+  renderCats();
+  renderProducts();
+  renderFreshStrip();
+  renderAdminProducts();
+  
+  showToast('🔄 Product list updated!');
 }
 
 function delProduct(id) {
@@ -1125,9 +1139,13 @@ function showProductDetail(id) {
   if (!p) return;
   const inWishlist = wishlist.some(w => w.id === id);
   const hasDiscount = p.originalPrice && p.originalPrice > p.price;
-  const imageHtml = p.imageUrl && p.imageUrl.trim() !== '' 
-    ? `<img src="${p.imageUrl}" style="max-width:150px;margin:0 auto;border-radius:12px;display:block;" onerror="this.style.display='none';this.after('❌ Image not available')" />`
-    : `<div style="font-size:64px;text-align:center">${p.emoji}</div>`;
+  
+  let imageHtml = '';
+  if (p.imageUrl && p.imageUrl.trim() !== '' && p.imageUrl.startsWith('http')) {
+    imageHtml = `<img src="${p.imageUrl}" style="max-width:150px;margin:0 auto;border-radius:12px;display:block;" onerror="this.style.display='none';this.after('❌ Image not available')" />`;
+  } else {
+    imageHtml = `<div style="font-size:64px;text-align:center">${p.emoji}</div>`;
+  }
   
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
@@ -1171,6 +1189,9 @@ window.addEventListener('scroll', () => {
 function init() {
   const savedNotif = localStorage.getItem('dissaNotifications');
   if (savedNotif) NOTIFICATIONS = JSON.parse(savedNotif);
+  
+  // Load fresh products from storage
+  loadProductsFromStorage();
   
   renderCats(); 
   renderProducts(); 
