@@ -23,6 +23,7 @@
       <a href="#home" class="nav-link active" onclick="scrollToSection('home')">Home</a>
       <a href="#products" class="nav-link" onclick="scrollToSection('products')">Shop</a>
       <a href="#fresh-today" class="nav-link" onclick="scrollToSection('fresh-today')">Fresh Today</a>
+      <a href="#recipes" class="nav-link" onclick="scrollToSection('recipes')">Recipes</a>
       <a href="#about" class="nav-link" onclick="scrollToSection('about')">About</a>
       <a href="#contact" class="nav-link" onclick="scrollToSection('contact')">Contact</a>
     </nav>
@@ -45,6 +46,7 @@
     <a href="#home" onclick="closeMobileNav()">🏠 Home</a>
     <a href="#products" onclick="closeMobileNav()">🛒 Shop</a>
     <a href="#fresh-today" onclick="closeMobileNav()">🥦 Fresh Today</a>
+    <a href="#recipes" onclick="closeMobileNav()">🍳 Recipes</a>
     <a href="#about" onclick="closeMobileNav()">ℹ️ About</a>
     <a href="#contact" onclick="closeMobileNav()">📞 Contact</a>
   </div>
@@ -120,6 +122,11 @@
   <div style="text-align:center;margin-top:32px;"><button class="btn-loadmore" id="loadMoreBtn" onclick="loadMore()" style="display:none">Load More Products ↓</button></div>
 </section>
 
+<section class="section" id="recipes">
+  <div class="section-header"><h2 class="section-title">🍳 Cooking Recipes</h2><span class="section-sub">Made with our fresh products</span></div>
+  <div class="recipes-grid" id="recipesGrid"></div>
+</section>
+
 <section class="section about-section" id="about">
   <div class="about-grid">
     <div class="about-text">
@@ -133,6 +140,12 @@
       <div class="store-hours"><h4>🕐 Store Hours</h4><div class="hours-row"><span>Mon – Fri</span><span id="hoursWeekday">7:00 AM – 9:00 PM</span></div><div class="hours-row"><span>Saturday</span><span id="hoursSat">7:00 AM – 8:00 PM</span></div><div class="hours-row"><span>Sunday</span><span id="hoursSun">8:00 AM – 6:00 PM</span></div></div>
     </div>
   </div>
+</section>
+
+<section class="section" id="reviews">
+  <div class="section-header"><h2 class="section-title">⭐ Customer Reviews</h2><span class="section-sub">What our customers say</span></div>
+  <div class="reviews-grid" id="reviewsGrid"></div>
+  <div style="text-align:center;margin-top:28px;"><button class="btn-hero-primary" onclick="openReviewForm()">✍️ Write a Review</button></div>
 </section>
 
 <section class="section contact-section" id="contact">
@@ -156,7 +169,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand"><div class="f-logo">🛒 DISSA SUPER</div><p>Your trusted neighbourhood supermarket<br>Fresh · Fast · Affordable · Sri Lanka</p><div class="social-links"><button onclick="openWhatsApp()" class="social-btn">💬</button><button class="social-btn">📘</button><button class="social-btn">📸</button><button class="social-btn">🐦</button></div></div>
-    <div class="footer-links"><h4>Quick Links</h4><a href="#home">Home</a><a href="#products">Products</a><a href="#fresh-today">Fresh Today</a><a href="#about">About Us</a><a href="#contact">Contact</a></div>
+    <div class="footer-links"><h4>Quick Links</h4><a href="#home">Home</a><a href="#products">Products</a><a href="#fresh-today">Fresh Today</a><a href="#recipes">Recipes</a><a href="#about">About Us</a><a href="#contact">Contact</a></div>
     <div class="footer-links"><h4>Categories</h4><a href="#products">🥦 Vegetables</a><a href="#products">🍎 Fruits</a><a href="#products">🥛 Dairy</a><a href="#products">🌾 Dry Goods</a><a href="#products">🍞 Bakery</a><a href="#products">🍗 Meat &amp; Fish</a></div>
     <div class="footer-links"><h4>Info</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Delivery Policy</a><a href="#" onclick="openAdmin()">Admin Panel</a></div>
     <div class="footer-newsletter"><h4>Newsletter</h4><p>Get weekly offers &amp; fresh arrivals</p><div class="newsletter-row"><input id="nlEmail" type="email" placeholder="your@email.com" /><button onclick="subscribeNewsletter()">→</button></div></div>
@@ -179,6 +192,8 @@
 <div class="cart-sidebar" id="wishlistSidebar" style="right:unset;left:0;transform:translateX(-100%)"><div class="cart-header"><h2>❤️ Wishlist</h2><button class="close-x" onclick="closeWishlist()">✕</button></div><div class="cart-body" id="wishlistBody"></div></div>
 
 <div class="modal-overlay" id="checkoutModal"><div class="modal"><div class="modal-head"><h2>📋 Checkout</h2><button class="close-x" onclick="closeCheckout()">✕</button></div><div class="modal-body" id="checkoutBody"></div></div></div>
+<div class="modal-overlay" id="loginModal"><div class="modal"><div class="modal-head"><h2 id="authTitle">👤 Login</h2><button class="close-x" onclick="closeLogin()">✕</button></div><div class="modal-body" id="loginBody"></div></div></div>
+<div class="modal-overlay" id="reviewModal"><div class="modal" style="max-width:480px"><div class="modal-head"><h2>⭐ Write a Review</h2><button class="close-x" onclick="closeReviewForm()">✕</button></div><div class="modal-body"><div class="form-group"><label>Your Name</label><input id="rv_name" placeholder="Your name" /></div><div class="form-group"><label>Rating</label><div class="star-rating" id="starRating"><span onclick="setRating(1)">⭐</span><span onclick="setRating(2)">⭐</span><span onclick="setRating(3)">⭐</span><span onclick="setRating(4)">⭐</span><span onclick="setRating(5)">⭐</span></div></div><div class="form-group"><label>Your Review</label><textarea id="rv_text" placeholder="Tell us about your experience…" rows="4"></textarea></div><button class="btn-hero-primary" style="width:100%" onclick="submitReview()">Submit Review</button></div></div></div>
 
 <div class="admin-overlay" id="adminOverlay"><div class="admin-panel"><div class="admin-top"><div><h2>⚙️ Admin Panel</h2><p>DISSA SUPER — Manage your store</p></div><button class="close-x" style="background:rgba(255,255,255,.2);color:white;border-color:rgba(255,255,255,.3);" onclick="closeAdmin()">✕</button></div><div class="admin-nav"><button class="admin-nav-btn active" onclick="adminTab('dashboard',this)">📊 Dashboard</button><button class="admin-nav-btn" onclick="adminTab('products',this)">📦 Products</button><button class="admin-nav-btn" onclick="adminTab('delivery',this)">🚚 Delivery</button><button class="admin-nav-btn" onclick="adminTab('orders',this)">📋 Orders</button><button class="admin-nav-btn" onclick="adminTab('users',this)">👤 Users</button><button class="admin-nav-btn" onclick="adminTab('analytics',this)">📈 Analytics</button><button class="admin-nav-btn" onclick="adminTab('shopinfo',this)">🏪 Shop Info</button></div><div class="admin-body" id="adminBody"></div></div></div>
 
