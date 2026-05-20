@@ -1,3 +1,16 @@
+// Force image reload on mobile devices
+if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    // Add timestamp to all product images
+    window.addEventListener('load', function() {
+        const images = document.querySelectorAll('.product-img img');
+        images.forEach(img => {
+            const originalSrc = img.src;
+            if (originalSrc && !originalSrc.includes('?')) {
+                img.src = originalSrc + '?t=' + Date.now();
+            }
+        });
+    });
+}
 /* DISSA SUPER - COMPLETE WORKING VERSION */
 /* Image URL Support + Limited Notifications (3 max) + Live Updates */
 
