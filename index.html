@@ -46,14 +46,19 @@
       <button class="btn-cart" onclick="openCart()">🛒 Cart <span class="cart-badge" id="cartCount">0</span></button>
       <button class="hamburger" onclick="toggleMobileNav()">☰</button>
     </div>
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home" onclick="closeMobileNav()">🏠 Home</a>
+  <a href="#products" onclick="closeMobileNav()">🛒 Shop</a>
+  <a href="#fresh-today" onclick="closeMobileNav()">🥦 Fresh Today</a>
+  <a href="#about" onclick="closeMobileNav()">ℹ️ About</a>
+  <a href="#contact" onclick="closeMobileNav()">📞 Contact</a>
+  
+  <!-- Dark Mode Toggle in Mobile Menu -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-top: 1px solid var(--border); margin-top: 8px;">
+    <span>🌙 Dark Mode</span>
+    <button class="icon-btn" onclick="toggleDarkMode(); closeMobileNav()" style="padding: 5px 12px;">Toggle</button>
   </div>
-  <div class="mobile-nav" id="mobileNav">
-    <a href="#home" onclick="closeMobileNav()">🏠 Home</a>
-    <a href="#products" onclick="closeMobileNav()">🛒 Shop</a>
-    <a href="#fresh-today" onclick="closeMobileNav()">🥦 Fresh Today</a>
-    <a href="#about" onclick="closeMobileNav()">ℹ️ About</a>
-    <a href="#contact" onclick="closeMobileNav()">📞 Contact</a>
-  </div>
+</div>
 </header>
 
 <div class="notif-panel" id="notifPanel">
