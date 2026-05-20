@@ -1,5 +1,4 @@
-/* DISSA SUPER - COMPLETE FIXED VERSION */
-/* Image URL Support + Limited Notifications (5 max) + Live Updates */
+/* DISSA SUPER - COMPLETE WORKING VERSION */
 
 'use strict';
 
@@ -97,21 +96,37 @@ function saveProducts() { localStorage.setItem('dissaProducts', JSON.stringify(p
 function saveOrders() { localStorage.setItem('dissaOrders', JSON.stringify(orders)); }
 function saveShopInfo() { localStorage.setItem('dissaShopInfo', JSON.stringify(shopInfo)); updateShopInfoDisplay(); }
 function saveNotifications() { 
-  // Keep only last 5 notifications
   NOTIFICATIONS = NOTIFICATIONS.slice(0, 5);
   localStorage.setItem('dissaNotifications', JSON.stringify(NOTIFICATIONS)); 
 }
 
 function updateShopInfoDisplay() {
-  const els = ['addressDisplay', 'addressDisplay2', 'phoneDisplay', 'whatsappDisplay', 'emailDisplay', 'aboutText', 'aboutText2', 'hoursWeekday', 'hoursSat', 'hoursSun'];
-  const values = [shopInfo.address, shopInfo.address, shopInfo.phone, shopInfo.whatsapp, shopInfo.email, shopInfo.aboutText, shopInfo.aboutText2, shopInfo.openingHours.weekdays, shopInfo.openingHours.saturday, shopInfo.openingHours.sunday];
-  els.forEach((id, i) => { const el = document.getElementById(id); if (el) el.textContent = values[i]; });
+  const elements = {
+    addressDisplay: document.getElementById('addressDisplay'),
+    addressDisplay2: document.getElementById('addressDisplay2'),
+    phoneDisplay: document.getElementById('phoneDisplay'),
+    whatsappDisplay: document.getElementById('whatsappDisplay'),
+    emailDisplay: document.getElementById('emailDisplay'),
+    aboutText: document.getElementById('aboutText'),
+    aboutText2: document.getElementById('aboutText2'),
+    hoursWeekday: document.getElementById('hoursWeekday'),
+    hoursSat: document.getElementById('hoursSat'),
+    hoursSun: document.getElementById('hoursSun')
+  };
+  if (elements.addressDisplay) elements.addressDisplay.textContent = shopInfo.address;
+  if (elements.addressDisplay2) elements.addressDisplay2.textContent = shopInfo.address;
+  if (elements.phoneDisplay) elements.phoneDisplay.textContent = shopInfo.phone;
+  if (elements.whatsappDisplay) elements.whatsappDisplay.textContent = shopInfo.whatsapp;
+  if (elements.emailDisplay) elements.emailDisplay.textContent = shopInfo.email;
+  if (elements.aboutText) elements.aboutText.textContent = shopInfo.aboutText;
+  if (elements.aboutText2) elements.aboutText2.textContent = shopInfo.aboutText2;
+  if (elements.hoursWeekday) elements.hoursWeekday.textContent = shopInfo.openingHours.weekdays;
+  if (elements.hoursSat) elements.hoursSat.textContent = shopInfo.openingHours.saturday;
+  if (elements.hoursSun) elements.hoursSun.textContent = shopInfo.openingHours.sunday;
 }
 
-// Add notification with limit (max 5)
 function addNotification(text) {
   NOTIFICATIONS.unshift({ id: Date.now(), text: text, time: 'Just now', read: false });
-  // Keep only last 5
   if (NOTIFICATIONS.length > 5) NOTIFICATIONS.pop();
   saveNotifications();
   renderNotifications();
@@ -139,6 +154,7 @@ function toggleMobileNav() {
   const nav = document.getElementById('mobileNav');
   if (nav) nav.classList.toggle('open'); 
 }
+
 function closeMobileNav() { 
   const nav = document.getElementById('mobileNav');
   if (nav) nav.classList.remove('open'); 
@@ -159,8 +175,7 @@ function renderNotifications() {
   const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
   const dot = document.getElementById('notifDot');
   if (dot) dot.style.display = unreadCount > 0 ? 'block' : 'none';
-  
-  list.innerHTML = NOTIFICATIONS.slice(0, 5).map(n => 
+  list.innerHTML = NOTIFICATIONS.map(n => 
     `<div class="notif-item" style="${n.read ? 'opacity:0.7' : ''}">
        ${n.text}
        <div style="font-size:11px;opacity:.5;margin-top:4px">${n.time}</div>
@@ -181,7 +196,9 @@ function closeBanner() {
   const banner = document.getElementById('promoBanner');
   if (banner) banner.style.display = 'none'; 
 }
+
 function applyPromo(code) { _applyPromoCode(code); }
+
 function applyPromoFromCart() { 
   const input = document.getElementById('promoInput');
   if (input) _applyPromoCode(input.value.trim().toUpperCase()); 
@@ -197,8 +214,16 @@ function _applyPromoCode(code) {
 }
 
 // ==================== CATEGORIES & PRODUCTS ====================
-function getCats() { return ['All', ...new Set(products.map(p => p.category))]; }
-const CAT_EMOJI = { All: '🛒', Vegetables: '🥦', Fruits: '🍎', Dairy: '🥛', 'Dry Goods': '🌾', Bakery: '🍞', 'Meat & Fish': '🍗', Beverages: '🥤', Snacks: '🍿' };
+function getCats() { 
+  return ['All', ...new Set(products.map(p => p.category))]; 
+}
+
+const CAT_EMOJI = { 
+  All: '🛒', Vegetables: '🥦', Fruits: '🍎', Dairy: '🥛', 
+  'Dry Goods': '🌾', Bakery: '🍞', 'Meat & Fish': '🍗', 
+  Beverages: '🥤', Snacks: '🍿' 
+};
+
 function catEmoji(c) { return CAT_EMOJI[c] || '📦'; }
 
 function renderCats() {
@@ -211,20 +236,31 @@ function renderCats() {
   ).join('');
 }
 
-function selectCat(c) { currentCat = c; displayedCount = PAGE_SIZE; renderCats(); renderProducts(); }
+function selectCat(c) { 
+  currentCat = c; 
+  displayedCount = PAGE_SIZE; 
+  renderCats(); 
+  renderProducts(); 
+}
+
 function filterProducts() { 
   const input = document.getElementById('searchInput');
   searchQ = input ? input.value.toLowerCase() : '';
   displayedCount = PAGE_SIZE; 
   renderProducts(); 
 }
+
 function sortProducts() { 
   const select = document.getElementById('sortSelect');
   sortMode = select ? select.value : 'default';
   displayedCount = PAGE_SIZE; 
   renderProducts(); 
 }
-function loadMore() { displayedCount += PAGE_SIZE; renderProducts(); }
+
+function loadMore() { 
+  displayedCount += PAGE_SIZE; 
+  renderProducts(); 
+}
 
 function getFilteredProducts() {
   const stockFilter = document.getElementById('stockFilter');
@@ -282,7 +318,6 @@ function renderProducts() {
     const hasDiscount = p.originalPrice && p.originalPrice > p.price;
     const discountPercent = hasDiscount ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
     
-    // Image URL support - use imageUrl if available, otherwise emoji
     const imageHtml = p.imageUrl && p.imageUrl.trim() !== '' 
       ? `<img src="${p.imageUrl}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><span class="emoji-fallback" style="display:none">${p.emoji}</span>`
       : `<span class="emoji-fallback">${p.emoji}</span>`;
@@ -366,6 +401,7 @@ function openWishlist() {
   if (overlay) overlay.classList.add('open');
   renderWishlistBody(); 
 }
+
 function closeWishlist() { 
   const sidebar = document.getElementById('wishlistSidebar');
   const overlay = document.getElementById('wishlistOverlay');
@@ -457,6 +493,7 @@ function openCart() {
   if (overlay) overlay.classList.add('open');
   renderCartBody(); 
 }
+
 function closeCart() { 
   const sidebar = document.getElementById('cartSidebar');
   const overlay = document.getElementById('cartOverlay');
@@ -513,6 +550,7 @@ function renderCartBody() {
 
 // ==================== CHECKOUT ====================
 let orderType = 'delivery';
+
 function openCheckout() { 
   closeCart(); 
   const modal = document.getElementById('checkoutModal');
@@ -520,6 +558,7 @@ function openCheckout() {
   orderType = deliveryEnabled ? 'delivery' : 'pickup'; 
   renderCheckout(); 
 }
+
 function closeCheckout() { 
   const modal = document.getElementById('checkoutModal');
   if (modal) modal.classList.remove('open'); 
@@ -653,6 +692,7 @@ function openAdmin() {
   if (overlay) overlay.classList.add('open'); 
   adminTab('dashboard', document.querySelector('.admin-nav-btn')); 
 }
+
 function closeAdmin() { 
   const overlay = document.getElementById('adminOverlay');
   if (overlay) overlay.classList.remove('open'); 
@@ -770,12 +810,12 @@ function showProdForm(id) {
     </div>
     <div class="form-group">
       <label>Product Image URL</label>
-      <input id="fp_imageUrl" type="url" value="${p ? p.imageUrl || '' : ''}" placeholder="https://example.com/image.jpg" />
+      <input id="fp_imageUrl" type="url" value="${p ? p.imageUrl || '' : ''}" placeholder="https://i.imgur.com/your-image.jpg" />
       <div id="imagePreview" style="margin-top:10px;">
         ${p && p.imageUrl ? `<img src="${p.imageUrl}" style="max-width:100px;border-radius:8px;" onerror="this.style.display='none'" />` : ''}
       </div>
       <small style="color:var(--text-light);display:block;margin-top:5px">
-        💡 Use image hosting: Imgur (right-click → Copy Image Address), Google Drive, or any direct image URL
+        💡 How to get image URL: Upload to Imgur → Right-click image → Copy Image Address
       </small>
     </div>
     <div class="form-actions">
