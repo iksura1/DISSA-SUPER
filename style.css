@@ -1,3 +1,7 @@
+/* Notifications සම්පූර්ණයෙන්ම අයින් කරනවා */
+.notif-panel, .notif-btn, #notifBtn, #notifDot, #notifPanel {
+    display: none !important;
+}
 /* DISSA SUPER - Complete Stylesheet */
 
 :root {
